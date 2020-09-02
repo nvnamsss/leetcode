@@ -4,7 +4,7 @@ public class Solution {
         int lmax = int.MinValue;
         int rmax = int.MinValue;    
 
-        int mid = (high + low) / 2;
+        int mid = low + (high - low) / 2;
 
         if (high == low) return nums[low];
         int sum = 0;
