@@ -76,6 +76,6 @@ public class Solution {
     }
 
     public TreeNode ConstructMaximumBinaryTree(int[] nums) {
-        return construct(nums, 0, nums.length);
+        return construct(nums, 0, nums.Length);
     }
 }

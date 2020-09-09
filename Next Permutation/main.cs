@@ -19,7 +19,7 @@ public class Solution
         int i = start, j = nums.Length - 1;
         while (i < j)
         {
-            swap(nums, i, j);
+            Swap(nums, i, j);
             i++;
             j--;
         }

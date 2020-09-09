@@ -13,7 +13,7 @@ public class MyHashSet {
 
     private void Collision()
     {
-
+        
     }
     
     public void Add(int key) {

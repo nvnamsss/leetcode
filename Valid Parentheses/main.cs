@@ -4,7 +4,7 @@
 
 // Open brackets must be closed by the same type of brackets.
 // Open brackets must be closed in the correct order.
- 
+
 
 // Example 1:
 
@@ -26,41 +26,47 @@
 
 // Input: s = "{[]}"
 // Output: true
- 
+
 
 // Constraints:
 
 // 1 <= s.length <= 104
 // s consists of parentheses only '()[]{}'.
 
-public class Solution {
+public class Solution
+{
     Stack<char> stack;
-    private void work(char c){
-        
+    private void work(char c)
+    {
+
     }
 
-    public bool IsValid(string s) {
-        stack = new Stack<char>();
-        HashSet<char> open = new Hashset<char>();
-        HashSet<char> close = new HashSet<char>();
-        open.Add("(");
-        open.Add("[");
-        open.Add("{");
-
-        close.Add(")");
-        close.Add("]");
-        close.Add("}");
+    public bool IsValid(string s)
+    {
+        Stack<char> stack = new Stack<char>();
+        List<char> open = new List<char>() { '(', '[', '{' };
+        List<char> close = new List<char>() { ')', ']', '}' };
 
         for (int loop = 0; loop < s.Length; loop++)
         {
             if (open.Contains(s[loop]))
             {
-
+                stack.Push(s[loop]);
             }
             else
             {
+                if (stack.Count == 0) return false;
 
+                if (open.IndexOf(stack.Peek()) != close.IndexOf(s[loop]))
+                {
+                    return false;
+                }
+                else
+                {
+                    stack.Pop();
+                }
             }
         }
+        return stack.Count == 0;
     }
 }

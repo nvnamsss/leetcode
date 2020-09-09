@@ -53,6 +53,6 @@ public class Solution
     public int SearchInsert(int[] nums, int target)
     {
         int index = BinarySearch(arr, 0, nums.Length -1, target);
-        return index > 0 ? index : ~index;
+        return index >= 0 ? index : ~index;
     }
 }
