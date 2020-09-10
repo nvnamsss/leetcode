@@ -59,7 +59,7 @@ public class Solution {
             {
                 if (lists[loop] == null) continue;
 
-                if (lists[loop].val <= lists[n.val])
+                if (lists[loop].val <= lists[n].val)
                 {
                     n = loop;
                 }
@@ -72,6 +72,6 @@ public class Solution {
             current = current.next;
         }
 
-        return root;
+        return root.next;
     }
 }
