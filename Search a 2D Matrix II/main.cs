@@ -27,40 +27,24 @@ public class Solution
         int m = matrix.GetLength(0);
         int n = matrix.GetLength(1);
 
-        int rl = 0;
-        int rr = m;
-        while (rl <= rr)
+        List<int> columns = new List<int>();
+        for (int loop = 0; loop < n; loop++)
         {
-            int mid = rl + (rr - rl) / 2;
-            if (matrix[mid, m - 1] == target)
+            if (target >= matrix[0, loop] && target <= matrix[m - 1, loop])
             {
-                rl = mid;
-                break;
+                columns.Add(loop);
             }
-
-            if (matrix[mid, m - 1] > target)
-                rr = mid - 1;
-            else if (matrix[mid, m - 1] < target)
-                rl = mid + 1;
         }
 
-        if (rl < rr) return false;
-
-        int cl = 0;
-        int cr = 0;
-        while (cl <= cr)
+        for (int loop = 0; loop < columns.Count; loop++)
         {
-            int mid = cl + (cr - cl) / 2;
-            if (matrix[rl, mid] == target)
+            int column = columns[loop];
+            for (int loop2 = 0; loop2 < m; loop2++)
             {
-                cl = mid;
-                break;
+                if (matrix[loop2, column] == target) return true;
             }
-
-            if (matrix[rl, mid] > target) cr = mid - 1;
-            else if (matrix[rl, mid] < target) cl = mid + 1;
         }
 
-        return cl < cr;
+        return false;
     }
 }

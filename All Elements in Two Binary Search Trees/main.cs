@@ -83,13 +83,13 @@ public class Solution {
             if (q1.Count == 0 && q2.Count == 0) break;
 
             
-            if (q1.Count > 0 && (q2.Count == 0 || q1.Peek() > q2.Peek()))
+            if (q1.Count > 0 && (q2.Count == 0 || q1.Peek() < q2.Peek()))
             {
                 rs.Add(q1.Dequeue());
                 continue;
             }
 
-            if (q2.Count > 0 && (q1.Count == 0 || q2.Peek() > q1.Peek()))
+            if (q2.Count > 0 && (q1.Count == 0 || q2.Peek() < q1.Peek()))
             {
                 rs.Add(q2.Dequeue());
                 continue;

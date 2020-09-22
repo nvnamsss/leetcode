@@ -71,38 +71,51 @@ public class Solution
 
         return res;
     }
-        public static void IncreaseSelectionSort(int[] nums)
+    public static void IncreaseSelectionSort(int[] nums)
+    {
+        for (int loop = 0; loop < nums.Length; loop++)
         {
-            for (int loop = 0; loop < nums.Length; loop++)
+            for (int loop2 = loop; loop2 < nums.Length; loop2++)
             {
-                for (int loop2 = loop; loop2 < nums.Length; loop2++)
-                {
-                    if (nums[loop2] < nums[loop]) Swap(nums[loop], nums[loop2]);
-                }
+                if (nums[loop2] < nums[loop]) Swap(nums[loop], nums[loop2]);
             }
         }
-    private void PermuteUnique(int[] nums, int l)
+    }
+
+    private bool ShouldSwap(int[] nums, int start, int curr)
+    {
+        for (int loop = start; loop < curr; loop++)
+        {
+            if (nums[loop] == nums[curr]) return false;   
+        }
+         return true;
+    }
+    private void PermuteUnique(int[] nums, int l, int r)
     {
         if (l == nums.Length)
         {
             res.Add(new List<int>(nums));
+            return;
         }
-        else{
-            for (int loop = l; loop < nums.Length; loop++)
+
+        for (int loop = l; loop < nums.Length; loop++)
+        {
+            if (loop == l || nums[loop] != nums[l])
             {
-                if (loop == l || nums[loop] != nums[l])
+                if ((ShouldSwap(nums, l, loop)))
                 {
                     Swap(nums, loop, l);
-                    PermuteUnique(nums, l + 1);
+                    PermuteUnique(nums, l + 1, r);
+                    Swap(nums, loop, l);
                 }
+
             }
         }
     }
     public IList<IList<int>> PermuteUnique(int[] nums)
     {
         res = new List<IList<int>>();
-        IncreaseSelectionSort(nums);
-        PermuteUnique(nums, 0);
+        PermuteUnique(nums, 0, nums.Length);
         return res;
     }
 }

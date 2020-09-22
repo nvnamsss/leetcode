@@ -27,7 +27,7 @@ public class Solution {
     public int[][] FlipAndInvertImage(int[][] A) {
             for (int loop = 0; loop < A.Length; loop++)
             {
-                for (int loop2 = 0; loop2 < A.Length + 1 / 2; loop2++)
+                for (int loop2 = 0; loop2 < (A.Length + 1) / 2; loop2++)
                 {
                     int tmp = A[loop][loop2] ^ 1;
                     A[loop][loop2] = A[loop][A.Length - loop2 - 1] ^ 1;

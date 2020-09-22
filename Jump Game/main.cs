@@ -55,7 +55,7 @@ public class Solution {
     bool rs;
     
     //Jump 2
-    private bool Jump(int[] nums)
+    private int Jump(int[] nums)
     {
         int required = 1;
         int step = nums.Length;

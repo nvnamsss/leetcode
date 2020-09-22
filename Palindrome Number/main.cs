@@ -23,23 +23,23 @@ using System;
 
 public class Solution {
     public bool IsPalindrome(int x) {
-        int digit = (int)Math.Floor(Math.Log10(x) + 1);
-        int sign = Math.Sign(x);
-        if (sign < 0) return false;
+int digit = (int)Math.Floor(Math.Log10(x) + 1);
+            int sign = Math.Sign(x);
+            if (sign < 0) return false;
 
-        int[] array = new int[digit];
-        for (int loop = 0; loop < digit; loop++)
-        {
-            int d = Math.Pow(digit - loop);
-            array[loop] = x / d;
-            x = x / d;        
-        }
+            int[] array = new int[digit];
+            for (int loop = 0; loop < digit; loop++)
+            {
+                int d = (int)Math.Pow(10, digit - loop - 1);
+                array[loop] = x / d;
+                x = x - (x / d) * d;
+            }
 
-        for (int loop = 0; loop < array.Length; loop++)
-        {
-            if (array[loop] != array[array.Length - loop - 1]) return false;    
-        }
+            for (int loop = 0; loop < array.Length; loop++)
+            {
+                if (array[loop] != array[array.Length - loop - 1]) return false;
+            }
 
-        return true;
+            return true;
     }
 }
