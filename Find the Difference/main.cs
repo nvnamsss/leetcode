@@ -37,6 +37,6 @@ public class Solution {
             if (d[t[loop]] == -1) return t[loop];
         }
 
-        return '';
+        return ' ';
     }
 }
