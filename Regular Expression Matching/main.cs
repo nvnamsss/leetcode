@@ -72,41 +72,29 @@ public class Solution {
     }
 
     public bool IsMatch(string s, string p) {
-        List<string> pattern = new List<string>();
-        List<string> dp = new List<string>();
-
-        for (int loop = 0; loop < p.Length; loop++)
-        {
-            if (p[loop] == "*")
-                pattern[pattern.Count - 1] += "*";
-            else
+             bool[][] dp = new bool[s.Length + 1][];
+            for (int loop = 0; loop < s.Length + 1; loop++)
             {
-                pattern.Add(p[loop]);
-                dp.Add("");
+                dp[loop] = new bool[p.Length + 1];
             }
-        }
+            dp[s.Length][p.Length] = true;
 
-        int star = 0;
-        while ((star = p.IndexOf('*', star) != -1))
-        {
-            pattern.Add(p[star - 1] + "*");
-        }
-
-        int at = 0;
-        
-        for (int loop = 0; loop < s.Length; loop++)
-        {
-            dp[at] += s[loop];
-            if (compare(dp[at], pattern[at]))
+            for (int loop = s.Length; loop >= 0; loop--)
             {
-                at++;
+                for (int loop2 = p.Length - 1; loop2 >= 0; loop2--)
+                {
+                    bool first_match = loop < s.Length && (p[loop2] == s[loop] || p[loop2] == '.');
+                    if (loop2 + 1 < p.Length && p[loop2 + 1] == '*')
+                    {
+                        dp[loop][loop2] = dp[loop][loop2 + 2] || first_match && dp[loop + 1][loop2];
+                    } 
+                    else
+                    {
+                        dp[loop][loop2] = first_match && dp[loop + 1][loop2 + 1];
+                    }
+                }
             }
-            else {
-                at--;
-                loop--;
-            }
-        }
 
-        return at == pattern.Count;
+            return dp[0][0];
     }   
 }
