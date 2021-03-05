@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>Ways_to_Split_Array_Into_Three_Subarrays</RootNamespace>
+  </PropertyGroup>
+
+</Project>

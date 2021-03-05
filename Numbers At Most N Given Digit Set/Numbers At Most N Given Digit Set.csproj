@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>Numbers_At_Most_N_Given_Digit_Set</RootNamespace>
+  </PropertyGroup>
+
+</Project>
