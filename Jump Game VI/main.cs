@@ -31,6 +31,21 @@ Constraints:
 -104 <= nums[i] <= 104
 */
 
+/*
+    explain why we can use greedy by finding the maximum value when nums is less than zero 
+    instead of optimize the jump stenps.
+    
+    we will demonstrate the optimized jump steps will never been the optimized score
+    it is a fallacy that we think the ratio between jump step and score - 
+    the more jump step, the more score and maybe vice versa.
+
+    in case positive step not found, we only can choose the max negative steps
+    we think we have two steps i. j where i, j is not optimized by score but optimized by step
+    and q, w, e is optimized by score,
+    step is k, 
+    if i + j < q + w + e 
+    si + sj = n = sq + sw + se
+*/
 using System;
 
 public class Solution {

@@ -43,6 +43,22 @@ using System.Collections.Generic;
 
 public class Solution {
     public int RemoveCoveredIntervals(int[][] intervals) {
-        
+        Array.Sort(intervals, (a, b) => {
+            if (a[0] == b[0]) return b[1].CompareTo(a[1]);
+            return a[0].CompareTo(b[0]);
+        });
+
+        int ret = intervals.Length;
+        int i = 0;
+        for (int loop = 1; loop < intervals.Length; loop++)
+        {
+            if (intervals[loop][0] >= intervals[i][0] && intervals[loop][1] <= intervals[i][1]) {
+                ret--;
+            } else {
+                i = loop;
+            }
+        }
+
+        return ret;
     }
 }

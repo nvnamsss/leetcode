@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>Count_Triplets_That_Can_Form_Two_Arrays_of_Equal_XOR</RootNamespace>
+  </PropertyGroup>
+
+</Project>

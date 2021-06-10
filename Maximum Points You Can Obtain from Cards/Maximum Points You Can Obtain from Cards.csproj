@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>Maximum_Points_You_Can_Obtain_from_Cards</RootNamespace>
+  </PropertyGroup>
+
+</Project>

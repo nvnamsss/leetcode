@@ -75,14 +75,18 @@ public class Quadnode<T>
 
     public void SetVertical(Quadnode<T> up, Quadnode<T> down)
     {
-        up.down = this;
-        down.up = this;
+        if (up != null) up.down = this;
+        if (down != null) down.up = this;
+        this.up = up;
+        this.down = down;
     }
 
     public void SetHorizontal(Quadnode<T> left, Quadnode<T> right)
     {
-        left.right = this;
-        right.left = this;
+        if (left != null) left.right = this;
+        if (right != null) right.left = this;
+        this.left = left;
+        this.right = right;
     }
 
     public void RemoveVertical()
@@ -93,7 +97,8 @@ public class Quadnode<T>
         down = null;
     }
 
-    public void RemoveHorizontal() {
+    public void RemoveHorizontal()
+    {
         if (left != null) left.right = right;
         if (right != null) right.left = left;
         left = null;
@@ -116,32 +121,37 @@ public class Trie<T>
     }
 }
 
-public class DoublyLinkedList<T>
+public class DoublyNode<T>
 {
     public T Value;
-    public DoublyLinkedList<T> Previous;
-    public DoublyLinkedList<T> Next;
+    public int Key;
+    public int Frequency;
+    public DoublyNode<T> Previous;
+    public DoublyNode<T> Next;
 
-    public DoublyLinkedList(T value, DoublyLinkedList<T> prev = null, DoublyLinkedList<T> next = null)
+    public DoublyNode() {
+    }
+    
+    public DoublyNode(T value, DoublyNode<T> prev = null, DoublyNode<T> next = null)
     {
         Value = value;
         Previous = prev;
         Next = next;
     }
 
-    private void SetPrevious(DoublyLinkedList<T> previous)
+    private void SetPrevious(DoublyNode<T> previous)
     {
         Previous = previous;
         if (previous != null) previous.Next = this;
     }
 
-    private void SetNext(DoublyLinkedList<T> next)
+    private void SetNext(DoublyNode<T> next)
     {
         Next = next;
         if (next != null) next.Previous = this;
     }
 
-    public void Set(DoublyLinkedList<T> prev, DoublyLinkedList<T> next)
+    public void Set(DoublyNode<T> prev, DoublyNode<T> next)
     {
         SetPrevious(prev);
         SetNext(next);
@@ -177,9 +187,9 @@ public class Data<TKey, TValue>
 public class Circular<T>
 {
     public int Count;
-    public DoublyLinkedList<T> first;
+    public DoublyNode<T> first;
 
-    public Circular(DoublyLinkedList<T> node)
+    public Circular(DoublyNode<T> node)
     {
         first = node;
         first.Next = first;
@@ -187,21 +197,21 @@ public class Circular<T>
         Count = 1;
     }
 
-    public void Insert(DoublyLinkedList<T> node)
+    public void Insert(DoublyNode<T> node)
     {
         node.Set(first, first.Next);
         Count++;
     }
 
-    public DoublyLinkedList<T> Pop()
+    public DoublyNode<T> Pop()
     {
-        DoublyLinkedList<T> f = first;
+        DoublyNode<T> f = first;
         f.Delete();
         Count--;
         return f;
     }
 
-    public void Delete(DoublyLinkedList<T> node)
+    public void Delete(DoublyNode<T> node)
     {
         if (node == first)
         {
@@ -215,6 +225,53 @@ public class Circular<T>
 }
 
 
+public class DoublyLinkedList<T>
+{
+    private DoublyNode<T> head;
+    private DoublyNode<T> tail;
+
+    public DoublyLinkedList()
+    {
+        head = new DoublyNode<T>();
+        tail = new DoublyNode<T>();
+        head.Next = tail;
+        tail.Previous = head;
+    }
+
+    public void Add(DoublyNode<T> node)
+    {
+        DoublyNode<T> prev = head;
+        DoublyNode<T> next = head.Next;
+        
+        prev.Next = node;
+        next.Previous = node;
+        node.Previous = prev;
+        node.Next = next;
+    }
+
+    public void Remove(DoublyNode<T> node)
+    {
+        DoublyNode<T> prev = node.Previous;
+        DoublyNode<T> next = node.Next;
+
+        prev.Next = next;
+        next.Previous = prev;
+        node.Previous = null;
+        node.Next = null;
+    }
+
+    public DoublyNode<T> RemoveFirst()
+    {
+        DoublyNode<T> f = tail.Previous;
+        Remove(f);
+        return f;
+    }
+
+    public bool Empty()
+    {
+        return head.Next == tail;
+    }
+}
 // 1 -> 1 -> 1 -> 2 -> 2 -> 3 -> 3 -> 4
 // when an value is update, it will append to the last greater
 // how should we call that? we have a node to storage the tier (counter)
@@ -226,87 +283,84 @@ public class LFUCache
 {
     int capacity;
 
-    Dictionary<int, Quadnode<int>> hash;
-    Quadnode<int> dummy;
+    Dictionary<int, DoublyNode<int>> cache;
+    Dictionary<int, DoublyLinkedList<int>> frequencies;
+
+    int minFrequency;
     public LFUCache(int capacity)
     {
         this.capacity = capacity;
-        hash = new Dictionary<int, Quadnode<int>>(capacity);
-        dummy = new Quadnode<int>(0);
+        cache = new Dictionary<int, DoublyNode<int>>(capacity);
+        frequencies = new Dictionary<int, DoublyLinkedList<int>>(capacity);
+
     }
 
     public int Get(int key)
     {
-        if (!hash.ContainsKey(key)) return -1;
+        if (!cache.ContainsKey(key)) return -1;
 
         UpdateKey(key);
-        return hash[key].Value;
+
+        return cache[key].Value;
     }
 
     public void Put(int key, int value)
     {
-        if (!hash.ContainsKey(key))
+        if (capacity == 0) return;
+        
+        if (!cache.ContainsKey(key))
         {
-            if (hash.Count == capacity)
+            if (cache.Count == capacity)
             {
-                DeleteFirst();
+                DoublyNode<int> f = frequencies[minFrequency].RemoveFirst();
+                cache.Remove(f.Key);
             }
 
-            Quadnode<int> q = new Quadnode<int>(value);
-            q.Key = key;
-            hash.Add(key, q);
-            Insert(q, dummy);
+            DoublyNode<int> d = new DoublyNode<int>(value);
+            d.Key = key;
+            d.Frequency =1;
+            cache.Add(key, d);
+
+            if (!frequencies.ContainsKey(1))
+            {
+                frequencies.Add(1, new DoublyLinkedList<int>());
+                minFrequency = 1;
+            }
+
+            frequencies[1].Add(d);
         }
         else
         {
             UpdateKey(key);
         }
 
-        hash[key].Value = value;
+        cache[key].Value = value;
     }
 
-    private void Insert(Quadnode<int> q, Quadnode<int> after)
-    {
-        Quadnode<int> f = after.right;
-        if (f == null)
-        {
-            q.SetHorizontal(after, f);
-        }
-        else
-        {
-            if (f.Counter == q.Counter)
-            {
-                q.left = f.left;
-                q.right = f.right;
-                q.SetVertical(f, f.up);
-            }
-            else
-            {
-                q.SetHorizontal(after, f);
-            }
-        }
-    }
+    /*
+        move the node to the next, 
+    */
 
     private void UpdateKey(int key)
     {
-        Quadnode<int> q = hash[key];
-        q.Counter++;
-        Insert(q, q.left.right);
-    }
-
-    private void DeleteFirst()
-    {
-        Quadnode<int> f = dummy.right;
-        if (f.up != null) {
-            f.up.SetHorizontal(f.left, f.right);
-        } else {
-            f.RemoveHorizontal();           
+        DoublyNode<int> d = cache[key];
+        frequencies[d.Frequency].Remove(d);
+        if (frequencies[d.Frequency].Empty())
+        {
+            frequencies.Remove(d.Frequency);
         }
 
-        f.left = null;
-        f.right =  null;
-        f.up = null;
-        f.down = null;
+        d.Frequency++;
+        if (!frequencies.ContainsKey(d.Frequency))
+        {
+            frequencies.Add(d.Frequency, new DoublyLinkedList<int>());
+        }
+
+        frequencies[d.Frequency].Add(d);
+
+        if (!frequencies.ContainsKey(minFrequency) || frequencies[minFrequency].Empty()) {
+            minFrequency++;
+        }
     }
 
 }

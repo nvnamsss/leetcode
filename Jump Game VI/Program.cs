@@ -36,6 +36,10 @@ namespace Jump_Game_VI
             result = solution.MaxResult(arr, 70000);
             Console.WriteLine($"Result: {result} - Expect: {2354241}");
 
+            arr = new int[]{1,-1,-2,-3,-7,-2,3};
+            result = solution.MaxResult(arr, 3);
+            Console.WriteLine($"Result: {result} - Expect: {1}");
+
         }
     }
 }

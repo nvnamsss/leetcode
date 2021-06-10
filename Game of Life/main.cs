@@ -38,8 +38,51 @@ In this question, we represent the board using a 2D array. In principle, the boa
 */
 
 using System;
-public class Solution {
-    public void GameOfLife(int[][] board) {
-        
+public class Solution
+{
+    public void GameOfLife(int[][] board)
+    {
+        int[] neightbors = new int[] { 0, 1, -1 };
+        int rows = board.Length;
+        int columns = board[0].Length;
+
+        for (int row = 0; row < rows; row++)
+        {
+            for (int column = 0; column < columns; column++)
+            {
+                int live = 0;
+                for (int loop = 0; loop < 3; loop++)
+                {
+                    for (int loop2 = 0; loop2 < 3; loop2++)
+                    {
+                        if (loop == 0 && loop2 == 0) continue;
+                        int r = row + neightbors[loop];
+                        int c = column + neightbors[loop2];
+                        if (r >= rows || r < 0 || c >= columns || c < 0) continue;
+
+                        if (Math.Abs(board[r][c]) == 1) live++;
+                    }
+                }
+
+                if (board[row][column] == 1 && (live < 2 || live > 3)) board[row][column] = -1;
+
+                if (board[row][column] == 0 && live == 3) board[row][column] = 2;
+            }
+        }
+
+        for (int row = 0; row < rows; row++)
+        {
+            for (int column = 0; column < columns; column++)
+            {
+                if (board[row][column] > 0)
+                {
+                    board[row][column] = 1;
+                }
+                else
+                {
+                    board[row][column] = 0;
+                }
+            }
+        }
     }
 }

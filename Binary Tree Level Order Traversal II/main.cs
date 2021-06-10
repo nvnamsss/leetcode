@@ -36,29 +36,29 @@ public class TreeNode
 
 public class Solution
 {
-List<IList<int>> rs;
-        private void levelOrderBottom(int level, TreeNode node)
+    List<IList<int>> rs;
+    private void levelOrderBottom(int level, TreeNode node)
+    {
+        if (rs.Count == level)
         {
-            if (rs.Count == level)
-            {
-                rs.Add(new List<int>());
-            }
-
-            rs[level].Add(node.val);
-
-            if (node.left != null) levelOrderBottom(level + 1, node.left);
-            if (node.right != null) levelOrderBottom(level + 1, node.right);
-
+            rs.Add(new List<int>());
         }
 
-        public IList<IList<int>> LevelOrderBottom(TreeNode root)
-        {
-            rs = new List<IList<int>>();
-            if (root == null) return rs;
+        rs[level].Add(node.val);
 
-            levelOrderBottom(0, root);
-            rs.Reverse();
-            
-            return rs;
-        }
+        if (node.left != null) levelOrderBottom(level + 1, node.left);
+        if (node.right != null) levelOrderBottom(level + 1, node.right);
+
+    }
+
+    public IList<IList<int>> LevelOrderBottom(TreeNode root)
+    {
+        rs = new List<IList<int>>();
+        if (root == null) return rs;
+
+        levelOrderBottom(0, root);
+        rs.Reverse();
+
+        return rs;
+    }
 }
