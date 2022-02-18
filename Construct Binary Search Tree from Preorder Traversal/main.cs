@@ -34,8 +34,27 @@ public class TreeNode
 }
 public class Solution
 {
+    private static TreeNode PreorderConstruct2(int[] pre)
+    {
+        if (pre.Length == 0) return null;
+
+        TreeNode node = new TreeNode(pre[0]);
+        //if (root == null)
+        //{
+        //    root = node;
+        //}
+
+        int[] left = pre.Where(p => p < node.val).ToArray();
+        int[] right = pre.Where(p => p > node.val).ToArray();
+
+        node.left = PreorderConstruct2(left);
+        node.right = PreorderConstruct2(right);
+
+        return node;
+    }
     public TreeNode BstFromPreorder(int[] preorder)
     {
-
+        TreeNode root = PreorderConstruct2(preorder);
+        return root;
     }
 }

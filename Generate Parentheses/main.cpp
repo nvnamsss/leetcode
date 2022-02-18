@@ -31,6 +31,7 @@ public:
         result = vector<string>();
         string s = string();
         backtrack(s, 0, 0, n);
+        return result;
     }
 };
 

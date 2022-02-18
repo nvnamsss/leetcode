@@ -39,9 +39,9 @@ public class Solution
         ListNode cur = head;
         while (cur != null)
         {
-
+            
         }
-        
+
         return head;
     }
 }

@@ -71,7 +71,8 @@ public class Solution {
             }
             dp11 = dp1;
             dp22 = dp2; 
+            max = Math.Max(dp1, max);
         }
-        return Math.Max(dp1, dp11);
+        return max;
     }
 }

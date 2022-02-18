@@ -49,6 +49,48 @@ Follow-up: Can you solve the problem in O(1) extra memory space?
  * };
  */
 
+// ListNode* cur = head;
+// ListNode* first;
+// ListNode* mid;
+// int n = 0;
+// int kd2 = k / 2;
+// while (cur != NULL) {
+//     if (n == kd2) {
+//         mid = cur;
+//         ListNode* next = reverseKGroup(cur->next, kd2);
+//         ListNode* p1 = first;
+//         ListNode* p2 = cur;
+
+//         while (n > 0) {
+//             // swap here
+//             ListNode* t1 = p1->next;
+//             ListNode* t2 = p2->next;
+
+//             // originally, the order is p1 -> t1 -> t1.next, p2 -> t2 -> t2.next
+//             // we want to get this order p1 -> t2 -> t1.next, p2 -> t1 -> t2.next
+
+//             ListNode* t = t1->next;
+//             t1->next = t2->next;
+//             t2->next = t;
+
+//             p1->next = t2;
+//             p2->next = t1;
+
+//             // then we go to the next pointer, it means t1 and t2
+//             p1 = t2;
+//             p2 = t1;
+
+//             n--;
+//         }
+
+//     }
+
+//     n++;
+//     cur = cur -> next;
+// }
+
+// return first;
+
 #include <bits/stdc++.h>
 using namespace std;
 struct ListNode
@@ -63,13 +105,33 @@ struct ListNode
 class Solution
 {
 
-    void reverse(ListNode* head, int n) {
-        
+    void reverse(ListNode *head, int n)
+    {
+        if (n < 2)
+        {
+            return;
+        }
+        ListNode *cur = head;
+        int i = 1;
+        while (i < n)
+        {
+            ListNode *t1 = cur->next;
+            ListNode *t2 = cur->next->next;
+            cur->next = t2;
+            t1->next = t2->next;
+            t2->next = t1;
+            cur = cur->next;
+            i++;
+        }
+
+        reverse(head, n - 1);
     }
+
 public:
-    ListNode* sample1(int length) {
-        ListNode* node = new ListNode(1);
-        ListNode* cur = node;
+    ListNode *sample1(int length)
+    {
+        ListNode *node = new ListNode(1);
+        ListNode *cur = node;
         for (int i = 2; i <= length; i++)
         {
             cur->next = new ListNode(i);
@@ -86,62 +148,47 @@ public:
         easily see that for reversing a list node, we reverse a half of list then using two pointer to swap the
         first half and second half listnode
         */
-
-        if (k < 2) return head;
-        ListNode* cur = head;
-        ListNode* first;
-        ListNode* mid;
-        int n = 0;
-        int kd2 = k / 2;
-        while (cur != NULL) {
-            if (n == kd2) {
-                mid = cur;
-                ListNode* next = reverseKGroup(cur->next, kd2);
-                ListNode* p1 = first;
-                ListNode* p2 = cur;
-
-                while (n > 0) {
-                    // swap here   
-                    ListNode* t1 = p1->next;
-                    ListNode* t2 = p2->next;
-
-                    // originally, the order is p1 -> t1 -> t1.next, p2 -> t2 -> t2.next
-                    // we want to get this order p1 -> t2 -> t1.next, p2 -> t1 -> t2.next
-
-                    ListNode* t = t1->next;
-                    t1->next = t2->next;
-                    t2->next = t;
-
-                    p1->next = t2;
-                    p2->next = t1;
-
-                    // then we go to the next pointer, it means t1 and t2
-                    p1 = t2;
-                    p2 = t1;
-
-                    n--;
-                }
-
-                
+        if (k < 2)
+            return head;
+        ListNode *dummy = new ListNode(0, head);
+        ListNode *turtoise = dummy;
+        ListNode *hare = dummy;
+        while (hare)
+        {
+            for (int i = 0; i < k && hare; i++)
+            {
+                hare = hare->next;
             }
 
-            n++;
-            cur = cur -> next;
+            if (hare)
+            {
+                hare = turtoise->next;
+                reverse(turtoise, k);
+                turtoise = hare;
+            }
         }
 
-        return first;
+        return dummy->next;
     }
-
-
 };
 
-int main() {
+void log(ListNode* rs) {
+    ListNode* cur = rs;
+    while (cur) {
+        cout << cur->val << " ";
+        cur = cur->next;
+    }
+    cout <<endl;
+}
+int main()
+{
     Solution s;
-    ListNode* sample = s.sample1(2);
-    s.reverseKGroup(sample, 2);
-
+    ListNode *sample = s.sample1(5);
+    ListNode* rs = s.reverseKGroup(sample, 2);
+    log(rs);
     sample = s.sample1(5);
-    s.reverseKGroup(sample, 5);
+    rs = s.reverseKGroup(sample, 3);
+    log(rs);
 
     return 1;
 }

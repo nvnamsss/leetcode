@@ -4,5 +4,5 @@ Thus I changed my approaching, by taking care a lot about the problem, thinking 
 
 After all, I learnt that:  -->
 
-A problem has many methods to solve, each method may emerge many problems
+A problem has many methods to solve, each method may emerges many problems
 ---

@@ -32,12 +32,7 @@ public:
     {
         int m = mat.size();
         int n = mat[0].size();
-        vector<vector<int>> rs(m);
-        for (int loop = 0; loop < m; loop++)
-        {
-            rs[loop] = vector<int>(n);
-        }
-
+        vector<vector<int>> rs = vector<vector<int>>(m, vector<int>(n, 0));
         int dp[m][n + 1];
         for (int i = 0; i < m; i++)
         {
@@ -65,7 +60,7 @@ public:
                 }
 
                 // insert
-                // rs[i][j] = sum;
+                rs[i][j] = sum;
             }
         }
 

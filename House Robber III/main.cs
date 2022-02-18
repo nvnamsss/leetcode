@@ -39,7 +39,7 @@ public class Solution {
         right root left then the above tree will become
         - recursive find with multi dp (each node in the right)
         the problem is no longer 1 dimension, it is multi dimension due to a house may connected by more than two house,
-        I will call that problem is nth connection dimension, we must solve it without any confliction        
+        I will call that problem is nth connected dimension, we must solve it without any confliction        
         */
     }
 }
