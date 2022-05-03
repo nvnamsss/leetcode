@@ -65,6 +65,14 @@ public:
             return NULL;
         return tries[c];
     }
+
+    void remove(char c) {
+        tries.erase(c);
+    }
+
+    bool empty() {
+        return tries.empty();
+    }
 };
 
 class Solution
@@ -80,6 +88,7 @@ class Solution
         {
             if (ans.find(word) == ans.end()) {
                 ans.insert(word);
+                t->end = false;
             }
         }
 
@@ -93,8 +102,11 @@ class Solution
             Trie *next = t->get(board[nr][nc]);
             if (next == NULL)
                 continue;
-
+        
             recursive(board, visited, word + board[nr][nc], next, nr, nc);
+            if (next->empty()) {
+                t->remove(board[nr][nc]);
+            }
         }
         visited[r][c] = false;
     }

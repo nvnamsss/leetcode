@@ -6,18 +6,19 @@ public:
     bool searchMatrix(vector<vector<int>>& matrix, int target) {
         int m = matrix.size();
         int n = matrix[0].size();
-        int r = 0;
-        for (int i = 0; i < m; i++)
-        {
-            if (target >= matrix[i][0] && target <= matrix[i][n - 1]) {
-                r = i;
-                break;
+        int l = 0;
+        int r = m * n - 1;
+        while (l <= r) {
+            int mid = l + (r - l) / 2;
+            int row = mid / n;
+            int column = mid % n;
+            if (matrix[row][column] == target) {
+                return true;
+            } else if (matrix[row][column] < target) {
+                l = mid + 1;
+            } else { 
+                r = mid - 1;
             }
-        }
-        
-        for (int i = 0; i < n; i++)
-        {
-            if (target == matrix[r][i]) return true;
         }
         
         return false;

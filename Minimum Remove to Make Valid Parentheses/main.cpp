@@ -39,9 +39,11 @@ s[i] is either'(' , ')', or lowercase English letter.
 #include <bits/stdc++.h>
 using namespace std;
 
-class Solution {
+class Solution
+{
 public:
-    string minRemoveToMakeValid(string s) {
+    string minRemoveToMakeValid(string s)
+    {
         /*
         (()()))
         */
@@ -49,22 +51,31 @@ public:
         queue<int> qc;
         for (int i = 0; i < s.size(); i++)
         {
-            if (s[i] == '(') {
+            if (s[i] == '(')
+            {
                 qo.push(i);
-            } else if (s[i] == ')') {
+            }
+            else if (s[i] == ')')
+            {
                 qc.push(i);
             }
         }
-        
-        while (!qo.empty() || !qc.empty()) {
-            if (qo.empty() || (!qc.empty() && qo.front() > qc.front())) {
+
+        while (!qo.empty() || !qc.empty())
+        {
+            if (qo.empty() || (!qc.empty() && qo.front() > qc.front()))
+            {
                 s[qc.front()] = '1';
                 qc.pop();
-            } else if (qc.empty()) {
+            }
+            else if (qc.empty())
+            {
                 // s = s.erase(qo.front(), 1);
                 s[qo.front()] = '1';
                 qo.pop();
-            } else {
+            }
+            else
+            {
                 qo.pop();
                 qc.pop();
             }
@@ -73,16 +84,59 @@ public:
         string ans = "";
         for (int i = 0; i < s.size(); i++)
         {
-            if (s[i] != '1') {
+            if (s[i] != '1')
+            {
                 ans += s[i];
             }
         }
-                
+
+        return ans;
+    }
+
+    string minRemoveToMakeValid2(string s)
+    {
+        /*
+        (()()))
+        */
+
+        int balance = 0;
+        int open = 0;
+        string pre_ans = "";
+        string ans = "";
+
+        for (int i = 0; i < s.size(); i++)
+        {
+            if (s[i] == '(')
+            {
+                open++;
+                balance++;
+            }
+            else if (s[i] == ')')
+            {
+                if (balance == 0) continue;
+                balance--;
+            }
+
+            pre_ans += s[i];
+        }
+
+        int open = open - balance;
+        for (int i = 0; i < pre_ans.size(); i++)
+        {
+            if (pre_ans[i] == '(') {
+                open--;
+                if (open < 0) continue;
+            }
+
+            ans += pre_ans[i];
+        }
+
         return ans;
     }
 };
 
-int main() {
+int main()
+{
     Solution s;
     string rs = s.minRemoveToMakeValid("lee(t(c)o)de)");
     cout << rs << endl;
@@ -90,5 +144,4 @@ int main() {
     cout << rs << endl;
     rs = s.minRemoveToMakeValid(")))(((");
     cout << rs << endl;
-
 };

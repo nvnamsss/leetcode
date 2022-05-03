@@ -6,7 +6,7 @@ using namespace std;
 class Solution
 {
 public:
-    double MyPow(double x, int n)
+    double myPow(double x, int n)
     {
         if (n < 0)
         {
@@ -31,6 +31,4 @@ public:
 
 int main()
 {
-    cout << DBL_MIN;
-    cin.get();
 }

@@ -53,13 +53,14 @@ class Solution {
         return storeIndex;
     }
 
-    void quickselect(vector<vector<int>>& points, int left, int right, int k) {
-        while (left < right) {
-            int pivot = left + (right - left) / 2;
+    void quickselect(vector<vector<int>>& points, int k) {
+        int left = 0;
+        int right = points.size() - 1;
+        int pivot = left + (right - left) / 2;
+
+        while (pivot != k) {
             pivot = partition(points, left, right, pivot);
-            if (pivot == k) {
-                return;
-            } else if (pivot < k){
+            if (pivot < k) {
                 left = pivot + 1;
             } else {
                 right = pivot - 1;
@@ -69,7 +70,7 @@ class Solution {
 public:
     vector<vector<int>> kClosest(vector<vector<int>>& points, int k) {
         vector<vector<int>> ans;
-        quickselect(points, 0, points.size() - 1, k);
+        quickselect(points, k);
         for (int i = 0; i < k; i++)
         {
             ans.push_back(points[i]);

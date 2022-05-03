@@ -45,8 +45,9 @@ using System.Collections.Generic;
 
 public class Solution {
     public void dfs() {
-        
+
     }
+    
     public int MinimumEffortPath(int[][] heights) {
         int[][] dp = new int[heights.Length][];
         for (int loop = 0; loop < dp.Length; loop++)

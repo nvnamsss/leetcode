@@ -31,40 +31,24 @@ using namespace std;
 class Solution {
 public:
     vector<int> partitionLabels(string s) {
-        vector<int> partitions = vector<int>(s.size() + 1, s.size());
-        unordered_map<char, int> last;
-        int slow = 0;
-        int fast = 1;
-        int count = 0;
-        partitions[0] = 0;
-        for (int i = 0; i < 26; i++)
-        {
-            last['a' + i] = -1;
-        }
-        
+        vector<int> last = vector<int>(26);
+        vector<int> rs;
+        int begin = -1;
+        int j = 0;
         for (int i = 0; i < s.size(); i++)
         {
-            int l = last[s[i]];
-            if (l == -1) {
-                partitions[count] = i;
-                count++;
-            } else {
-                int j = count - 1;
-                while (l < partitions[j]) {
-                    j--;
-                }
-                count = j + 1;
-            } 
+            last[s[i] - 'a'] = i;
+        }
 
-            last[s[i]] = i;
-        }
-        partitions[count] = s.size();
-        vector<int> rs;
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < s.size(); i++)
         {
-            rs.push_back(partitions[i + 1] - partitions[i]);
+            j = max(j, last[s[i] - 'a']);
+            if (i == j) {
+                rs.push_back(i - begin);
+                begin = i;
+            }
         }
-        
+                
         return rs;
     }
 };

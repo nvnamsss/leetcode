@@ -38,110 +38,110 @@ equations[i][0], equations[i][1], queries[i][0], queries[i][1] consist of lower 
 
 using System;
 using System.Collections.Generic;
-
 public class Solution {
-    public class G {
-        public string v;
-        public Dictionary<string, double> g;
-        public G(string v)
+           List<double> result = new List<double>();
+        double ans;
+        public class G
         {
-            this.v = v;
-            g = new Dictionary<string, double>();
-        }
-
-        public double Convert(string a)
-        {
-            if (g.ContainsKey(a))
+            public string v;
+            public Dictionary<string, double> g;
+            public G(string v)
             {
-                return g[a];
+                this.v = v;
+                g = new Dictionary<string, double>();
             }
 
-            return -1;
-        }
-
-        public void Sync(G g)
-        {
-            foreach (var item in g.g)
+            public double Convert(string a)
             {
-                if (item.Key == v) continue;
-                
-                if (!this.g.ContainsKey(item.Key))
+                if (g.ContainsKey(a))
                 {
-                    double vv = this.g[g.v];
-                    this.g.Add(item.Key, vv * item.Value);
+                    return g[a];
+                }
+
+                return -1;
+            }
+
+            public void Sync(G g)
+            {
+                foreach (var item in g.g)
+                {
+                    if (item.Key == v) continue;
+
+                    if (!this.g.ContainsKey(item.Key))
+                    {
+                        double vv = this.g[g.v];
+                        this.g.Add(item.Key, vv * item.Value);
+                    }
                 }
             }
-        }
 
-        public override bool Equals(object obj)
-        {
-            return base.Equals(obj);
-        }
-
-        public override int GetHashCode()
-        {
-            return v.GetHashCode();
-        }
-        public override string ToString()
-        {
-            return v;
-        }
-    }
-
-    public double solve(Dictionary<string, double> variables, List<string> query)
-    {
-        if (!variables.ContainsKey(query[0]) || !variables.ContainsKey(query[1])) return -1;
-        return variables[query[0]] / variables[query[1]];        
-    }
-    
-    public double query(Dictionary<string, G> graph, List<string> query)
-    {
-        double v1 = 1;
-        for (int loop = 1; loop < query[0].Length; loop++)
-        {
-            v1 *= graph[query[0][loop]].Convert(query[0][0]);
-        }
-
-        double v2 = 1;
-        for (int loop = 1; loop < query[1].Length; loop++)
-        {
-            v2 *= graph[query[1][loop]].Convert(query[1][0]);
-        }
-
-        v2 *= graph[query[1][0]].Convert(query[0][0]);
-
-        return v1 / v2;
-    }
-
-    public double[] CalcEquation(IList<IList<string>> equations, double[] values, IList<IList<string>> queries) {
-        List<double> result = new List<double>();
-        //graph
-        Dictionary<string, G> g = new Dictionary<string, G>();
-
-        //build graph
-        for (int loop = 0; loop < values.Length; loop++)
-        {
-            string a = equations[loop][0];
-            string b = equations[loop][1];
-
-            if (!g.ContainsKey(a)) g.Add(a, new G(a));
-            if (!g.ContainsKey(b)) g.Add(b, new G(b));
-
-            g[a].g.Add(b, values[loop]);
-            g[b].g.Add(a, 1.0 / values[loop]);
-
-            foreach (var item in g[a].g)
+            public override bool Equals(object obj)
             {
-                if (g.ContainsKey(item.Key))
-                    g[item.Key].Sync(g[b]);
+                return base.Equals(obj);
+            }
+
+            public override int GetHashCode()
+            {
+                return v.GetHashCode();
+            }
+            public override string ToString()
+            {
+                return v;
             }
         }
 
-        foreach (var query in queries)
+        private void dfs(Dictionary<string, G> g, HashSet<string> visited, string source, string destination, double w)
         {
-            result.Add(solve(variables, query));    
+            if (!g.ContainsKey(source) || !g.ContainsKey(destination)) return;
+            visited.Add(source);
+            if (source == destination)
+            {
+                ans = w;
+                //result.Add(w);
+                return;
+            }
+
+            foreach (var item in g[source].g)
+            {
+                if (visited.Contains(item.Key)) continue;
+
+                dfs(g, visited, item.Key, destination, w * item.Value);
+            }
+        }
+            public double[] CalcEquation(IList<IList<string>> equations, double[] values, IList<IList<string>> queries)
+        {
+            //graph
+            Dictionary<string, G> g = new Dictionary<string, G>();
+
+            //build graph
+            for (int loop = 0; loop < values.Length; loop++)
+            {
+                string a = equations[loop][0];
+                string b = equations[loop][1];
+
+                if (!g.ContainsKey(a)) g.Add(a, new G(a));
+                if (!g.ContainsKey(b)) g.Add(b, new G(b));
+
+                g[a].g.Add(b, values[loop]);
+                g[b].g.Add(a, 1.0 / values[loop]);
+
+                //foreach (var item in g[a].g)
+                //{
+                //    if (g.ContainsKey(item.Key))
+                //        g[item.Key].Sync(g[a]);
+                //}
+            }
+
+            foreach (var query in queries)
+            {
+                HashSet<string> visited = new HashSet<string>();
+                ans = -1;
+                dfs(g, visited, query[0], query[1], 1);
+                result.Add(ans);
+                //result.Add(Query(g, query));
+            }
+
+            return result.ToArray();
         }
 
-        return result.ToArray();        
-    }
 }

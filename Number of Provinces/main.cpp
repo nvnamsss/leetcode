@@ -34,6 +34,48 @@ isConnected[i][j] == isConnected[j][i]
 #include <bits/stdc++.h>
 using namespace std;
 
+class UnionFind {
+    vector<int> group;
+    vector<int> rank;
+    int count;
+public:
+    UnionFind(int size) {
+        group = vector<int>(size);
+        rank = vector<int>(size);
+        for (int i = 0; i < size; i++)
+        {
+            group[i] = i;
+        }
+        count = size;
+    }
+
+    int find(int node) {
+        if (node == group[node]) {
+            return node;
+        }
+        group[node] = find(group[node]);
+        return group[node];
+    }
+
+    bool join(int node1, int node2) {
+        int group1 = find(node1);
+        int group2 = find(node2);
+        if (group1 == group2) {
+            return false;
+        }
+
+        if (rank[group1] > rank[group2]) {
+            group[group2] = group1;
+        } else if (rank[group1] < rank[group2]) {
+            group[group1] = group2;
+        } else {
+            group[group2] = group1;
+            rank[group1]++;
+        }
+        return true;
+    }
+};
+
 class Solution {
     void recursive(vector<vector<int>>& isConnected, vector<bool>& visited, int i) {
         visited[i] = true;
@@ -47,8 +89,7 @@ class Solution {
         
     }
 
-public:
-    int findCircleNum(vector<vector<int>>& isConnected) {
+    int dfs(vector<vector<int>>& isConnected) {
         int n = isConnected.size();
         vector<bool> visited = vector<bool>(n, false);
         int count = 0;
@@ -67,5 +108,28 @@ public:
         }
         
         return count;
+    }
+
+    int unionFind(vector<vector<int>>& isConnected) {
+        int n = isConnected.size();
+        UnionFind uf = UnionFind(n);
+        int ans = n;
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                if (isConnected[i][j]) {
+                    if (uf.join(i, j)) {
+                        ans--;
+                    }
+                }
+            }
+            
+        }
+        return ans;
+    }
+public:
+    int findCircleNum(vector<vector<int>>& isConnected) {
+        return unionFind(isConnected);      
     }
 };

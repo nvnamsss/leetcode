@@ -4,27 +4,23 @@ using namespace std;
 class Solution {
 public:
     bool isValid(string s) {
-        int roundBracket = 0;
-        int curlyBracket = 0;
-        int squareBracket = 0;
-        vector<char> open = vector<char>{'(', '{', '['};
-        vector<char> end = vector<char>{')', '}', ']'};
+        unordered_map<char, int> open = {{'(', 0}, {'{', 1}, {'[', 2}};
+        unordered_map<char, int> close = {{')', 0}, {'}', 1}, {']', 2}};
         stack<char> stack;
         for (int i = 0; i < s.size(); i++)
         {
-            if (find(open.begin(), open.end(), s[i]) != open.end()) {
+            if (open.find(s[i]) != open.end()) {
                 stack.push(s[i]);
             } else {
-                if (stack.empty()){
-                    return false;
-                }
-                auto openIndex = find(open.begin(), open.end(), stack.top());
-                auto endIndex = find(end.begin(), end.end(), s[i]);
-
-                if (openIndex - open.begin() != endIndex - end.begin()) {
+                if (stack.empty()) {
                     return false;
                 }
 
+                int o = open[stack.top()];
+                int e = close[s[i]];
+                if (o != e) {
+                    return false;
+                }
                 stack.pop();
             }
 
