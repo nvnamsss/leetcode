@@ -1,7 +1,7 @@
 /*
 Given a collection of numbers, nums, that might contain duplicates, return all possible unique permutations in any order.
 
- 
+
 
 Example 1:
 
@@ -14,7 +14,7 @@ Example 2:
 
 Input: nums = [1,2,3]
 Output: [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
- 
+
 
 Constraints:
 
@@ -25,45 +25,46 @@ Constraints:
 #include <bits/stdc++.h>
 using namespace std;
 
-class Solution {
+class Solution
+{
     vector<vector<int>> result;
-    void swap(vector<int>& nums, int i, int j) {
-        int t = nums[i];
-        nums[i] = nums[j];
-        nums[j] = t;
-    }
-    bool shouldSwap(vector<int>& nums, int start, int current) {
+    bool shouldSwap(vector<int> &nums, int start, int current)
+    {
         for (int i = start; i < current; i++)
         {
-            if (nums[i] == nums[current]) {
+            if (nums[i] == nums[current])
+            {
                 return false;
             }
         }
         return true;
     }
 
-    void recursive(vector<int>& nums, int index) {
-        if (index == nums.size()) {
+    void recursive(vector<int> &nums, int index)
+    {
+        if (index == nums.size())
+        {
             result.push_back(nums);
             return;
         }
 
         for (int i = index; i < nums.size(); i++)
         {
-            if (i == index || nums[i] != nums[index]) {
-                if (shouldSwap(nums, index, i)) {
-                    swap(nums, i, index);
+            if (i == index || nums[i] != nums[index])
+            {
+                if (shouldSwap(nums, index, i))
+                {
+                    swap(nums[i], nums[index]);
                     recursive(nums, index + 1);
-                    swap(nums, i, index);
+                    swap(nums[i], nums[index]);
                 }
-                                
             }
         }
-        
     }
 
 public:
-    vector<vector<int>> permuteUnique(vector<int>& nums) {
+    vector<vector<int>> permuteUnique(vector<int> &nums)
+    {
         recursive(nums, 0);
         return result;
     }
