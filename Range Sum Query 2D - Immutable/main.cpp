@@ -59,9 +59,9 @@ public:
     
     int sumRegion(int row1, int col1, int row2, int col2) {
         int sum = 0;
-        for (int i = row1; i < row2; i++)
+        for (int i = row1; i <= row2; i++)
         {
-            sum += dp[i][col2] - dp[i][col1];
+            sum += dp[i][col2 + 1] - dp[i][col1];
         }
         
         return sum;

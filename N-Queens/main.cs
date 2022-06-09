@@ -1,130 +1,106 @@
-/*
-The n-queens puzzle is the problem of placing n queens on an n×n chessboard such that no two queens attack each other.
-
-
-
-Given an integer n, return all distinct solutions to the n-queens puzzle.
-
-Each solution contains a distinct board configuration of the n-queens' placement, where 'Q' and '.' both indicate a queen and an empty space respectively.
-
-Example:
-
-Input: 4
-Output: [
- [".Q..",  // Solution 1
-  "...Q",
-  "Q...",
-  "..Q."],
-
- ["..Q.",  // Solution 2
-  "Q...",
-  "...Q",
-  ".Q.."]
-]
-Explanation: There exist two distinct solutions to the 4-queens puzzle as shown above.
-*/
-
-using System;
-using System.Collections.Generic;
 public class Solution {
-    IList<IList<string>> rs;
-    int n;
-    private void setseal(bool[][] banned, int row, int column, bool seal)
-    {
-        for (int loop = 0; loop < column; loop++)
+IList<IList<string>> result;
+        int n;
+        private void setseal(int[][] banned, int row, int column, int seal)
         {
-            banned[row][loop] = seal;
-        }
-
-        for (int loop = 0; loop < row; loop++)
-        {
-            banned[loop][column] = seal;
-        }
-
-        int ld = 0;
-  
-        bool did = false;
-
-        while (did)
-        {
-            did = false;
-            if (row - ld >= 0 && column - ld >= 0)
+            for (int loop = 0; loop < n; loop++)
             {
-                banned[row - ld][column - ld] = seal;
-                did = true;
+                banned[row][loop] += seal;
             }
 
-            if (row + ld < n && column + ld < n)
+            for (int loop = 0; loop < n; loop++)
             {
-                banned[row + ld][column + ld] = seal;
-                did = true;
+                banned[loop][column] += seal;
             }
 
-            if (row - ld >= 0 && column + ld < n)
+            int ld = 0;
+
+            bool did = true;
+
+            while (did)
             {
-                banned[row - ld][column + ld] = seal;
-                did = true;
+                did = false;
+                if (row - ld >= 0 && column - ld >= 0)
+                {
+                    banned[row - ld][column - ld] += seal;
+                    did = true;
+                }
+
+                if (row + ld < n && column + ld < n)
+                {
+                    banned[row + ld][column + ld] += seal;
+                    did = true;
+                }
+
+                if (row - ld >= 0 && column + ld < n)
+                {
+                    banned[row - ld][column + ld] += seal;
+                    did = true;
+                }
+
+                if (row + ld < n && column - ld >= 0)
+                {
+                    banned[row + ld][column - ld] += seal;
+                    did = true;
+                }
+
+                ld++;
             }
 
-            if (row + ld < n && column - ld >= 0)
+        }
+
+        private List<string> tomatrix(List<int> rs)
+        {
+            List<string> s = new List<string>();
+            for (int loop = 0; loop < n; loop++)
             {
-                banned[row + ld][column - ld] = seal;
-                did = true;
+                StringBuilder sb = new StringBuilder(new string('.', n));
+               
+                sb[rs[loop]] = 'Q';
+                s.Add(sb.ToString());
+            }
+
+            return s;
+        }
+
+        private void backtrack(List<int> rs, int[][] banned, int column)
+        {
+            if (column == n)
+            {
+                result.Add(tomatrix(rs));
+                return;
+            }
+
+            for (int loop = 0; loop < n; loop++)
+            {
+                if (banned[loop][column] == 0)
+                {
+                    rs[loop] = column;
+                    setseal(banned, loop, column, column + 1);
+                    backtrack(rs, banned, column + 1);
+                    setseal(banned, loop, column, -(column + 1));
+                }
             }
         }
 
-    }
-
-    private List<string> tomatrix(List<int> rs)
-    {
-        List<string> rs = string.Empty;
-        for (int loop = 0; loop < n; loop++)
+        public IList<IList<string>> SolveNQueens(int n)
         {
-            string added = new string('.', n);
-            added[rs[loop]] = 'Q';
-            rs.Add(added);
-        }
-
-        return rs;
-    }
-
-    private void backtrack(List<int> rs, bool[][] banned, int column)
-    {
-        if (column == n)
-        {
-            rs.Add(tomatrix(rs));
-            return;
-        }
-        
-        for (int loop = 0; loop < n; loop++)
-        {
-            if (!banned[loop][column])
+            this.n = n;
+            result = new List<IList<string>>();
+            int[][] banned = new int[n][];
+            for (int loop = 0; loop < n; loop++)
             {
-                rs[loop] = column;
-                setseal(banned, loop, column, true);
-                backtrack(rs, banned, column + 1);
-                setseal(banned, loop, column, false);
+                banned[loop] = new int[n];
             }
-        }
-    }   
 
-    public IList<IList<string>> SolveNQueens(int n) {
-        this.n = n;
-        rs = new List<IList<string>>();
-        bool[][] banned = new bool[n][];
-        for (int loop = 0; loop < n; loop++)
-        {
-            banned[loop] = new bool[n];
-        }
+            List<int> arr = new List<int>();
+            for (int loop = 0; loop < n; loop++)
+            {
+                arr.Add(-1);
+            }
 
-        List<int> arr = new List<int>();
-        for (int loop = 0; loop < n; loop++)
-        {
-            arr.Add(-1);
-        }
-        
-        backtrack(arr, banned, 0);
+            backtrack(arr, banned, 0);
 
-        return result;
-    }
+            return result;
+        }
 }
