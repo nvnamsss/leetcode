@@ -102,8 +102,7 @@ class Solution
         return distances;
     }
 
-public:
-    int findCheapestPrice(int n, vector<vector<int>> &flights, int src, int dst, int k)
+    int dijktra(int n, vector<vector<int>> &flights, int src, int dst, int k)
     {
         vector<vector<pair<int, int>>> graph = vector<vector<pair<int, int>>>(n);
         vector<bool> visited = vector<bool>(n);
@@ -123,4 +122,64 @@ public:
         }
         return costs[dst][0];
     }
+
+    long dfs(vector<vector<int>> &graph, vector<unordered_map<int, long>> &dp, int node, int dst, int n, int k)
+    {
+        if (node == dst)
+        {
+            return 0;
+        }
+
+        if (k < 0)
+        {
+            return INT32_MAX;
+        }
+
+        if (dp[node].find(k) != dp[node].end())
+        {
+            return dp[node][k];
+        }
+
+        long ans = INT32_MAX;
+        for (int i = 0; i < n; i++)
+        {
+            int w = graph[node][i];
+            if (w > 0)
+            {
+                ans = min(ans, dfs(graph, dp, i, dst, n, k-1) + w);
+            }
+        }
+        dp[node][k] = ans;
+        return ans;
+    }
+
+    int memoization(int n, vector<vector<int>> &flights, int src, int dst, int k)
+    {
+        vector<vector<int>> graph = vector<vector<int>>(n, vector<int>(n));
+        vector<unordered_map<int, long>> dp = vector<unordered_map<int, long>>(n);
+        for (int i = 0; i < flights.size(); i++)
+        {
+            int department = flights[i][0];
+            int destination = flights[i][1];
+            int cost = flights[i][2];
+            graph[department][destination] = cost;
+        }
+
+
+        dfs(graph, dp, src, dst, n, k);
+        return dp[src][k] >= INT32_MAX ? -1 : dp[src][k];
+    }
+
+public:
+    int findCheapestPrice(int n, vector<vector<int>> &flights, int src, int dst, int k)
+    {
+        return memoization(n, flights, src, dst, k);
+    }
 };
+
+
+int main() {
+    Solution s;
+    vector<vector<int>> flights = {{0,1,100}, {1,2,100}, {2,0,100}, {1,3,600}, {2,3,200}};
+    cout << s.findCheapestPrice(4,flights, 0,3,1) << endl;
+}

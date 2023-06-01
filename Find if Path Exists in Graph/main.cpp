@@ -57,8 +57,7 @@ class Solution {
         
         return false;
     }
-public:
-    bool validPath(int n, vector<vector<int>>& edges, int source, int destination) {
+    bool dfs(int n, vector<vector<int>>& edges, int source, int destination) {
         vector<int> visited = vector<int>(n);
         vector<vector<int>> graph = vector<vector<int>>(n);
         for (int i = 0; i < edges.size(); i++)
@@ -67,6 +66,21 @@ public:
             graph[edges[i][1]].push_back(edges[i][0]);
         }
         
-        return recursive(graph, visited, source, destination);        
+        return recursive(graph, visited, source, destination); 
+    }
+
+    bool bidirectional(int n, vector<vector<int>>& edges, int source, int destination) {
+        queue<int> q;
+        vector<bool>  visited = vector<bool>(n);
+        while (!q.empty()) {
+            int count = q.size();
+                       
+        }
+
+        return false;
+    }
+public:
+    bool validPath(int n, vector<vector<int>>& edges, int source, int destination) {
+       return bidirectional(n, edges, source, destination);
     }
 };

@@ -49,17 +49,21 @@ public:
         while (!q.empty())
         {
             int count = q.size();
-            bool done = false;
-            for (int i = 0; i < count; i++)
+            
+            TreeNode* fnode = q.front();
+            q.pop();
+            rs.push_back(fnode->val);
+            if (fnode->right) {
+                q.push(fnode->right);
+            }
+            if (fnode->left) {
+                q.push(fnode->left);
+            }
+
+            for (int i = 1; i < count; i++)
             {
                 TreeNode *node = q.front();
                 q.pop();
-                if (!done)
-                {
-                    rs.push_back(node->val);
-                    done = true;
-                }
-
                 if (node->right)
                 {
                     q.push(node->right);

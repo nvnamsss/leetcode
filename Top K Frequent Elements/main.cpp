@@ -38,7 +38,7 @@ class Solution
         int storeIndex = left;
         for (int i = left; i <= right; i++)
         {
-            if (m[values[i]] < pivotFreq)
+            if (m[values[i]] > pivotFreq)
             {
                 swap(values[i], values[storeIndex]);
                 storeIndex++;
@@ -84,8 +84,8 @@ public:
         {
             values.push_back(v.first);
         }
-        quickSelect(0, values.size() - 1, values.size() - k);
-        for (int i = values.size() - k; i < values.size(); i++)
+        quickSelect(0, values.size() - 1, k);
+        for (int i = 0; i < k; i++)
         {
             rs.push_back(values[i]);
         }

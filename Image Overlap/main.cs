@@ -80,12 +80,14 @@ public class Solution {
         for (int j = 0; j < N; j++)
         {
             if (A[i][j] == 0) continue;
-            for (int m = 0; m < N; m++)
-            for (int n = 0; n < N; n++)
-            {
-                if (B[m][n] == 0) continue;
-                res = Math.Max(res, ++count[N + i - m, N + j - n]);
+            for (int m = 0; m < N; m++) {
+                for (int n = 0; n < N; n++)
+                            {
+                                if (B[m][n] == 0) continue;
+                                res = Math.Max(res, ++count[N + i - m, N + j - n]);
+                            }
             }
+            
         }
 
         return res;

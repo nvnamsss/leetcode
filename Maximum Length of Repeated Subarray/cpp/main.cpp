@@ -26,17 +26,10 @@ using namespace std;
 class Solution {
 public:
     int findLength(vector<int>& nums1, vector<int>& nums2) {
+        vector<vector<int>> dp = vector<vector<int>>(nums1.size() + 1, vector<int>(nums2.size() + 1));
         int dp[nums1.size() + 1][nums2.size() + 1];
         int rs = 0;
-        
-        for (int i = 0; i <= nums1.size() ; i++)
-        {
-            for (int j = 0; j <= nums2.size(); j++)
-            {
-                dp[i][j] = 0;
-            }
-        }
-        
+
         for (int i = nums1.size() - 1; i >= 0; i--)
         {
             for (int j = nums2.size() - 1; j >= 0; j--)

@@ -37,8 +37,27 @@ struct TreeNode {
 };
 
 class Solution {
-public:
-    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+    TreeNode* spaceEffectiveRec(vector<int>& preorder, vector<int>& inorder, unordered_map<int, int>& m, int& p, int l, int r) {
+        if (l > r) {
+            return NULL;
+        }
+
+        TreeNode* root = new TreeNode(preorder[p++]);
+        root->left = spaceEffectiveRec(preorder, inorder, m, p, l, m[root->val] - 1);
+        root->right = spaceEffectiveRec(preorder, inorder, m, p, m[root->val] + 1, r);
+        return root;
+    }
+    TreeNode* spaceEffective(vector<int>& preorder, vector<int>& inorder) {
+        unordered_map<int, int> m;
+        for (int i = 0; i < inorder.size(); i++)
+        {
+            m[inorder[i]] = i;
+        }
+        int p = 0;
+        return spaceEffectiveRec(preorder, inorder, m, p, 0, inorder.size() - 1);
+    }
+
+    TreeNode* buildTreeRecursive(vector<int>& preorder, vector<int>& inorder) {
         if (preorder.size() == 0) return NULL;
 
         TreeNode* root = new TreeNode(preorder[0]);
@@ -51,14 +70,25 @@ public:
                 break;
             }
         }
-
+        
+        /*
+        Preorder gives us the root nodes meanwhile inorder gives us the left nodes
+        Let H(i) -> i is a hash function mapping from 
+        Let pi denotes the index of root node in preorder and ri denotes the index of perspective node in inorder which is ri = H(pi) in another words
+        we always have ri >= pi, thus inorder[pi:ri-1] will be left node and inorder[ri+1:] will be right node
+        it works down recursively 
+        */
         vector<int> leftInorder = vector<int>(inorder.begin(), inorder.begin() + rootInorder);
         vector<int> leftPreorder = vector<int>(preorder.begin() + 1, preorder.begin() + 1 + rootInorder);
         vector<int> rightInorder = vector<int>(inorder.begin() + rootInorder + 1, inorder.end());    
         vector<int> rightPreorder = vector<int>(preorder.begin() + rootInorder + 1, preorder.end());
-        root->left = buildTree(leftPreorder, leftInorder);
-        root->right = buildTree(rightPreorder, rightInorder);
+        root->left = buildTreeRecursive(leftPreorder, leftInorder);
+        root->right = buildTreeRecursive(rightPreorder, rightInorder);
         return root;
+    }
+public:
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        return spaceEffective(preorder, inorder);
     }
 };
 

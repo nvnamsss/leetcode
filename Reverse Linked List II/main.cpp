@@ -37,8 +37,48 @@ struct ListNode {
 };
 
 class Solution {
-public:
-    ListNode* reverseBetween(ListNode* head, int left, int right) {
+    ListNode* reverse(ListNode* head) {
+        ListNode* cur = head;
+        ListNode* prev = NULL;
+        while (cur) {
+            ListNode* next = cur->next;
+            cur->next = prev;
+            prev = cur;
+            cur = next;
+        }
+
+        return head;
+    }
+    ListNode* secondSolution(ListNode* head, int left, int right) {
+        ListNode* dummy = new ListNode(0, head);
+        ListNode* cur = dummy;
+        for (int i = 1; i < left; i++)
+        {
+            cur = cur->next;
+        }
+        
+        ListNode* h = cur;
+        ListNode* rh = cur->next;
+
+        for (int i = left; i <= right; i++)
+        {
+            cur = cur->next;
+        }
+
+        ListNode* t = cur->next;
+        ListNode* rt = cur;
+
+        h->next = NULL;
+        rt->next = NULL;
+
+        reverse(rh);
+        
+        h->next = rt;
+        rh->next = t;
+        return dummy->next;
+    }
+
+    ListNode* firstSolution(ListNode* head, int left, int right) {
         // a -> b -> c -> d -> e
         // n1 = a n2 = b n3 = c
         // n2->next = n1
@@ -60,7 +100,7 @@ public:
         n3 = n2->next;
         
         while (i < right) {
-            n2->next = n1;
+            n2->next = n1;  
             n1 = n2;
             n2 = n3;
             n3 = n2->next;
@@ -74,6 +114,10 @@ public:
         t1->next = h1;
 
         return dummy->next;
+    }
+public:
+    ListNode* reverseBetween(ListNode* head, int left, int right) {
+        return secondSolution(head, left, right);
     }
 };
 
@@ -100,5 +144,7 @@ void print(ListNode* h) {
 int main() {
     Solution s;
     ListNode* h = gen(5);
-    s.reverseBetween(h);
+    ListNode* ans = s.reverseBetween(h, 2, 4);
+
+    print(ans);
 }

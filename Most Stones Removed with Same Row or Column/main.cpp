@@ -5,7 +5,7 @@ A stone can be removed if it shares either the same row or the same column as an
 
 Given an array stones of length n where stones[i] = [xi, yi] represents the location of the ith stone, return the largest possible number of stones that can be removed.
 
- 
+
 
 Example 1:
 
@@ -32,7 +32,7 @@ Example 3:
 Input: stones = [[0,0]]
 Output: 0
 Explanation: [0,0] is the only stone on the plane, so you cannot remove it.
- 
+
 
 Constraints:
 
@@ -45,26 +45,55 @@ No two stones are at the same coordinate point.
 #include <bits/stdc++.h>
 using namespace std;
 
-class Solution {
-
-    void recursive(vector<vector<int>>& stones, vector<int>& rows, vector<int>& column, int& result, int x, int y) {
-        for (size_t i = 0; i < stones.size(); i++)
-        {
-
-        }
-        
+class Solution
+{
+    bool share(vector<int> &a, vector<int> &b)
+    {
+        return a[0] == b[0] || a[1] == b[1];
     }
-public:
-    int removeStones(vector<vector<int>>& stones) {
-        unordered_map<int, int> rows;
-        unordered_map<int, int> columns;
+    void recursive(vector<vector<int>> &graph, vector<int> &visited, int x)
+    {
+        visited[x] = true;
+        for (int i = 0; i < graph[x].size(); i++)
+        {
+            if (!visited[graph[x][i]])
+            {
+                recursive(graph, visited, graph[x][i]);
+            }
+        }
+    }
+
+    int dfs(vector<vector<int>> &stones)
+    {
+        vector<vector<int>> graph = vector<vector<int>>(stones.size());
+        vector<int> visited = vector<int>(stones.size());
+        int components = 0;
+        for (int i = 0; i < stones.size(); i++)
+        {
+            for (int j = i + 1; j < stones.size(); j++)
+            {
+                if (share(stones[i], stones[j]))
+                {
+                    graph[i].push_back(j);
+                    graph[j].push_back(i);
+                }
+            }
+        }
 
         for (int i = 0; i < stones.size(); i++)
         {
-            rows[stones[i][0]]++;
-            columns[stones[i][1]]++;
+            if (!visited[i])
+            {
+                components++;
+                recursive(graph, visited, i);
+            }
         }
-        
-        
+
+        return stones.size() - components;
+    }
+    
+public:
+    int removeStones(vector<vector<int>> &stones)
+    {
     }
 };

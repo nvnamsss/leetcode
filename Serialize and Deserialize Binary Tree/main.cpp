@@ -42,18 +42,103 @@ struct TreeNode {
 };
 
 class Codec {
+    string getObjectString(string data, int &i) {
+        if (data[i] != '{') {
+            return "";
+        }
+
+        int open = 0;
+        string ans = "";
+        do {
+            ans += data[i];
+            if (data[i] == '{') {
+                open++;
+            } else if (data[i] == '}') {
+                open--;    
+            }
+            i++;
+        }while(open>0);
+
+        return ans;
+    }
+
+    string getNumericString(string data, int&i) {
+        string ans = "";
+        while (data[i] >= '0' && data[i] <= '9') {
+            ans += data[i];
+            i++;
+        }
+
+        return ans;
+    }
 public:
     // Encodes a tree to a single string.
     string serialize(TreeNode* root) {
-        
+        if (!root) {
+            return "null";
+        }
+
+        string ans = "{";
+        ans += "\"val\": " + to_string(root->val) + ",";
+        ans += "\"left\": " + serialize(root->left) + ",";
+        ans += "\"right\": " + serialize(root->right);
+        ans += "}";
+        return ans;
     }
 
     // Decodes your encoded data to tree.
     TreeNode* deserialize(string data) {
-        
+        if (data == "" || data == "null") {
+            return NULL;
+        }
+        TreeNode* ans = new TreeNode(0);
+        int i = 0;
+        while (i < data.size()) {
+            if (data[i] == '"') {
+                string key = "";
+                while (data[i] == '"') {
+                    key += data[i];
+                    i++;
+                }
+
+                // next is ':' but we skip it
+                i++;
+                if (data[i] == '{') {
+                    // value is object  
+                    string value = getObjectString(data, i);
+                    if (key == "left") {
+                        ans->left = deserialize(value);
+                    } else {
+                        ans->right = deserialize(value);
+                    }
+                } else if (data[i] >= '0' && data[i] <= '9'){
+                    // value is numeric
+                    string value = getNumericString(data, i);
+                    ans->val = stoi(value);
+                } else {
+                    // value is null
+                    i += 3;
+                }
+            }
+            i++;
+        }
+        return ans;
     }
 };
 
 // Your Codec object will be instantiated and called as such:
 // Codec ser, deser;
 // TreeNode* ans = deser.deserialize(ser.serialize(root));
+
+int main() {
+    Codec c;
+    TreeNode* n2 = new TreeNode(2);
+    TreeNode* n3 = new TreeNode(3);
+
+    TreeNode* n1 = new TreeNode(1);
+    n1->left = n2;
+    n1->right = n3;
+    string d =  c.serialize(n1);
+    TreeNode* t = c.deserialize(d);
+    cout << t->val << endl;
+}

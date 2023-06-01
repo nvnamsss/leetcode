@@ -35,7 +35,7 @@ public:
         int ans = 0;
         stack<int> s;
         stack<int> s2;
-        heights.push_back(-1);
+        s.push_back(-1);
         for (int i = 0; i < heights.size(); i++)
         {
             int step = 0;

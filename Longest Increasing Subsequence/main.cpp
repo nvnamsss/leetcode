@@ -34,33 +34,31 @@ using namespace std;
 class Solution {
 public:
     int lengthOfLIS(vector<int>& nums) {
-        vector<int> p(nums.size());
-        vector<int> m(nums.size() + 1);
-        int l = 0;
+        // doing binary search to find the position of current value in increasing subsequence
+        // there is only one case: current value greater than k values. Then it will be memorized at k - 1 place inside DP.
+        // 
+        vector<int> dp = vector<int>(nums.size() + 1);
+        int length = 0;
 
         for (int i = 0; i < nums.size(); i++)
         {
-            int lo = 1;
-            int hi = l;
+            int left = 1;
+            int right = length;
             int newL = 0;
 
-            while (lo <= hi) {
-                int mid = lo + (hi - lo) / 2;
-                if (nums[m[mid]] < nums[i]) {
-                    lo = mid + 1;
+            while (left <= right) {
+                int mid = left + (right - left) / 2;
+                if (nums[dp[mid]] < nums[i]) {
+                    left = mid + 1;
                 } else {
-                    hi = mid - 1;
+                    right = mid - 1;
                 }   
             }
 
-            newL = lo;
-            p[i] = m[newL - 1];
-            m[newL] = i;
-            if (newL > l) {
-                l = newL;
-            }
+            dp[left] = i;
+            length = max(length, left);
         }
         
-        return l;
+        return length;
     }
 };

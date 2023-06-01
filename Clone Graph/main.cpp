@@ -10,7 +10,7 @@ class Node {
     public int val;
     public List<Node> neighbors;
 }
- 
+
 
 Test case format:
 
@@ -20,7 +20,7 @@ An adjacency list is a collection of unordered lists used to represent a finite 
 
 The given node will always be the first node with val = 1. You must return the copy of the given node as a reference to the cloned graph.
 
- 
+
 
 Example 1:
 
@@ -43,7 +43,7 @@ Example 3:
 Input: adjList = []
 Output: []
 Explanation: This an empty graph, it does not have any nodes.
- 
+
 
 Constraints:
 
@@ -84,7 +84,8 @@ class Solution
 {
     Node *clone(Node *node, vector<Node *> &visited)
     {
-        if (!node) return node;
+        if (!node)
+            return node;
         Node *rs = new Node(node->val);
         visited[node->val] = rs;
         for (int i = 0; i < node->neighbors.size(); i++)
@@ -100,12 +101,43 @@ class Solution
         return rs;
     }
 
-public:
-    Node *cloneGraph(Node *node)
+    Node *hclone(Node *node, unordered_map<int, Node *> s)
+    {
+        if (!node)
+            return node;
+        Node *rs = new Node(node->val);
+        s.insert({rs->val, rs});
+        for (int i = 0; i < node->neighbors.size(); i++)
+        {
+            if (s.find(node->neighbors[i]->val) == s.end())
+            {
+                hclone(node->neighbors[i], s);
+            }
+            cout << s[node->neighbors[i]->val]->val << endl'
+            rs->neighbors.push_back(s[node->neighbors[i]->val]);
+        }
+
+        return rs;
+    }
+
+    Node *hashtable(Node *node)
+    {
+        unordered_map<int, Node *> s;
+        Node *ans = hclone(node, s);
+        return ans;
+    }
+
+    Node *array(Node *node)
     {
         vector<Node *> visited = vector<Node *>(101, NULL);
         Node *ans = clone(node, visited);
         return ans;
+    }
+
+public:
+    Node *cloneGraph(Node *node)
+    {
+        return hashtable(node);
     }
 };
 
