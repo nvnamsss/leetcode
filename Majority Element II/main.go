@@ -1,5 +1,7 @@
 package main
 
+import "log"
+
 func majorityElement(nums []int) []int {
 	result := []int{}
 
@@ -27,6 +29,7 @@ func majorityElement(nums []int) []int {
 		}
 	}
 
+	log.Printf("%v %v", candidate1, candidate2)
 	c1 := 0
 	c2 := 0
 	for loop := 0; loop < length; loop++ {
@@ -48,6 +51,6 @@ func majorityElement(nums []int) []int {
 }
 
 func main() {
-	input := []int{2, 2, 1, 3}
+	input := []int{2, 1, 1, 3, 1, 4, 5, 6}
 	majorityElement(input)
 }
