@@ -70,7 +70,7 @@ public:
                     {
                         r = mid - 1;
                     }
-                    else
+                    else    
                     {
                         l = mid + 1;
                     }

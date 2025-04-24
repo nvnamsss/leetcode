@@ -80,10 +80,6 @@ public class Solution
                 if (valL <= valR) l = m + 1;
                 else {
                     r = m - 1;
-                    // if (l > r) {
-                    //     l--;
-                    //     r--;
-                    // }
                 } 
             }
 

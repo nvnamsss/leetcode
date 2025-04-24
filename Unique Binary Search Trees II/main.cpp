@@ -34,11 +34,11 @@ struct TreeNode {
 
 class Solution {
     vector<TreeNode*> recursive(int l, int r) {
-        if (l > r) return vector<TreeNode*>{};
-        if (l == r) return vector<TreeNode*>{new TreeNode(l)};
+        if (l > r) return {NULL};
+        if (l == r) return {new TreeNode(l)};
         vector<TreeNode*> ans;
 
-        for (int i = l; i <= r + 1; i++)
+        for (int i = l; i <= r; i++)
         {
             vector<TreeNode*> leftNodes = recursive(l, i - 1);
             vector<TreeNode*> rightNodes = recursive(i + 1, r);
@@ -61,3 +61,8 @@ public:
         return recursive(1, n);
     }
 };
+
+int main() {
+    Solution s;
+    s.generateTrees(3);
+}
